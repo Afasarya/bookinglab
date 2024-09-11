@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\Laboratory; 
 
 use Illuminate\Http\Request;
 
@@ -22,16 +23,25 @@ class LaboratoryController extends Controller
     // Menyimpan laboratorium baru ke database
     public function store(Request $request)
     {
+        // Validasi input
         $request->validate([
             'name' => 'required',
             'capacity' => 'required|integer',
         ]);
-
-        Laboratory::create($request->all());
-
-        return redirect()->route('laboratories.index')->with('success', 'Laboratorium berhasil ditambahkan.');
+    
+        // Simpan laboratorium ke database
+        Laboratory::create([
+            'name' => $request->name,
+            'capacity' => $request->capacity,
+        ]);
+    
+        // SweetAlert sukses
+        alert()->success('Sukses', 'Laboratorium berhasil ditambahkan!');
+    
+        // Redirect ke halaman index
+        return redirect()->route('laboratories.index');
     }
-
+    
     // Menampilkan form edit laboratorium
     public function edit(Laboratory $laboratory)
     {
@@ -40,22 +50,33 @@ class LaboratoryController extends Controller
 
     // Memperbarui laboratorium di database
     public function update(Request $request, Laboratory $laboratory)
-    {
-        $request->validate([
-            'name' => 'required',
-            'capacity' => 'required|integer',
-        ]);
+{
+    // Validasi input
+    $request->validate([
+        'name' => 'required',
+        'capacity' => 'required|integer',
+    ]);
 
-        $laboratory->update($request->all());
+    // Update laboratorium di database
+    $laboratory->update([
+        'name' => $request->name,
+        'capacity' => $request->capacity,
+    ]);
 
-        return redirect()->route('laboratories.index')->with('success', 'Laboratorium berhasil diperbarui.');
-    }
+    // SweetAlert sukses
+    alert()->success('Sukses', 'Laboratorium berhasil diperbarui!');
+
+    // Redirect ke halaman index
+    return redirect()->route('laboratories.index');
+}
+
 
     // Menghapus laboratorium dari database
     public function destroy(Laboratory $laboratory)
     {
         $laboratory->delete();
+        alert()->success('Sukses', 'Laboratorium berhasil dihapus!');
 
-        return redirect()->route('laboratories.index')->with('success', 'Laboratorium berhasil dihapus.');
+        return redirect()->route('laboratories.index');
     }
 }

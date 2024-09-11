@@ -62,7 +62,7 @@
     <main class="nxl-container">
         {{-- content --}}
         @yield('dashboard')
-
+        @yield('content')
         {{-- footer --}}
         @include('admin.components.footer')
     </main>
